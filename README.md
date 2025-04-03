@@ -1,16 +1,534 @@
-## Hi there 👋
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Content Hub</title>
+    <style>
+        :root {
+            /* Gold Palette */
+            --gold-primary: #DDA15E;
+            --gold-dark: #BC6C25;
+            --gold-light: #FEFAE0;
+            --gold-10: rgba(221, 161, 94, 0.1);
+            --gold-20: rgba(221, 161, 94, 0.2);
+            
+            /* Supporting Colors */
+            --text-dark: #283618;
+            --text-light: #F8F9FA;
+            --pure-white: #FFFFFF;
+            --dark-bg: #1A1A1A;
+            
+            /* Spacing */
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+        }
 
-<!--
-**linabunny2/linabunny2** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+        /* Dark Mode */
+        [data-theme="dark"] {
+            --gold-light: var(--dark-bg);
+            --text-dark: var(--text-light);
+            --pure-white: #2D2D2D;
+        }
 
-Here are some ideas to get you started:
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
+        }
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background-color: var(--gold-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: var(--space-md);
+        }
+
+        /* ===== PROFILE HEADER ===== */
+        .profile-header {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+            padding: var(--space-lg);
+            border-radius: 0 0 20px 20px;
+            color: var(--text-light);
+            box-shadow: 0 4px 12px var(--gold-20);
+        }
+
+        .profile-top {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--gold-light);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .bio-section {
+            flex-grow: 1;
+        }
+
+        .bio-text {
+            width: 100%;
+            min-height: 60px;
+            padding: var(--space-sm);
+            border-radius: 8px;
+            resize: none;
+            font-size: 14px;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-light);
+        }
+
+        .bio-text::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* ===== SOCIAL LINKS ===== */
+        .social-links {
+            display: flex;
+            gap: var(--space-md);
+            margin: var(--space-md) 0;
+            flex-wrap: wrap;
+        }
+
+        .social-icon {
+            width: 28px;
+            height: 28px;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+        }
+
+        /* ===== CONTENT CONTROLS ===== */
+        .content-controls {
+            display: flex;
+            gap: var(--space-sm);
+            margin: var(--space-lg) 0;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            background-color: var(--pure-white);
+            color: var(--text-dark);
+            box-shadow: 0 2px 4px var(--gold-20);
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--gold-20);
+        }
+
+        .control-btn.active {
+            background-color: var(--gold-primary);
+            color: var(--text-light);
+        }
+
+        /* ===== MEDIA GRID ===== */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        @media (min-width: 500px) {
+            .media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        .media-item {
+            position: relative;
+            aspect-ratio: 1/1;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 2px solid var(--gold-20);
+            transition: all 0.3s;
+        }
+
+        .media-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px var(--gold-20);
+        }
+
+        .media-thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: var(--space-sm);
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .paid-badge {
+            background-color: var(--gold-primary);
+            color: var(--text-light);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .video-indicator {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+
+        /* ===== UPLOAD SECTION ===== */
+        .upload-area {
+            border: 2px dashed var(--gold-primary);
+            border-radius: 8px;
+            padding: var(--space-lg);
+            text-align: center;
+            margin: var(--space-lg) 0;
+            background-color: var(--gold-10);
+            display: none;
+        }
+
+        .upload-btn {
+            background-color: var(--gold-primary);
+            color: var(--text-light);
+            border: none;
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--gold-dark);
+            transform: translateY(-2px);
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: var(--pure-white);
+            margin: 20px auto;
+            padding: var(--space-lg);
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            color: var(--text-dark);
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gold-primary);
+        }
+
+        /* ===== THEME TOGGLE ===== */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gold-primary);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 90;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle">🌓</button>
+
+    <div class="container">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-top">
+                <img src="https://via.placeholder.com/80/283618/DDA15E?text=Profile" alt="Profile" class="profile-pic">
+                <div class="bio-section">
+                    <textarea class="bio-text" placeholder="Tell your audience about yourself...">Artist & creator sharing my work with the world!</textarea>
+                </div>
+            </div>
+            
+            <div class="social-links">
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" class="social-icon"></a>
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046126.png" alt="TikTok" class="social-icon"></a>
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111644.png" alt="Telegram" class="social-icon"></a>
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968764.png" alt="Facebook" class="social-icon"></a>
+            </div>
+        </div>
+
+        <!-- Content Controls -->
+        <div class="content-controls">
+            <button class="control-btn active" data-filter="all">All</button>
+            <button class="control-btn" data-filter="free">Free</button>
+            <button class="control-btn" data-filter="paid">Premium</button>
+            <button class="control-btn" id="upload-trigger">+ Upload</button>
+        </div>
+
+        <!-- Media Grid -->
+        <div class="media-grid">
+            <!-- Free Content -->
+            <div class="media-item" data-type="free">
+                <img src="https://via.placeholder.com/300/FEFAE0/DDA15E?text=Free+Photo" class="media-thumbnail">
+                <div class="media-overlay">
+                    <span>Free</span>
+                    <button class="edit-btn" data-id="1">✏️</button>
+                </div>
+            </div>
+            
+            <!-- Premium Video -->
+            <div class="media-item" data-type="paid">
+                <img src="https://via.placeholder.com/300/FEFAE0/DDA15E?text=Video+Thumb" class="media-thumbnail">
+                <div class="video-indicator">▶️ Video</div>
+                <div class="media-overlay">
+                    <span class="paid-badge">$4.99</span>
+                    <button class="edit-btn" data-id="2">✏️</button>
+                </div>
+            </div>
+            
+            <!-- Subscription Content -->
+            <div class="media-item" data-type="subscription">
+                <img src="https://via.placeholder.com/300/FEFAE0/DDA15E?text=Exclusive" class="media-thumbnail">
+                <div class="media-overlay">
+                    <span class="paid-badge">Subscribers Only</span>
+                    <button class="edit-btn" data-id="3">✏️</button>
+                </div>
+            </div>
+            
+            <!-- More content examples -->
+            <div class="media-item" data-type="free">
+                <img src="https://via.placeholder.com/300/FEFAE0/DDA15E?text=Sample" class="media-thumbnail">
+                <div class="media-overlay">
+                    <span>Free</span>
+                    <button class="edit-btn" data-id="4">✏️</button>
+                </div>
+            </div>
+            
+            <div class="media-item" data-type="paid">
+                <img src="https://via.placeholder.com/300/FEFAE0/DDA15E?text=Premium" class="media-thumbnail">
+                <div class="media-overlay">
+                    <span class="paid-badge">$3.99</span>
+                    <button class="edit-btn" data-id="5">✏️</button>
+                </div>
+            </div>
+            
+            <div class="media-item" data-type="subscription">
+                <img src="https://via.placeholder.com/300/FEFAE0/DDA15E?text=Video+Excl" class="media-thumbnail">
+                <div class="video-indicator">▶️ Video</div>
+                <div class="media-overlay">
+                    <span class="paid-badge">Subscribers Only</span>
+                    <button class="edit-btn" data-id="6">✏️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Area -->
+        <div class="upload-area" id="upload-area">
+            <h3>Upload New Content</h3>
+            <input type="file" id="media-upload" multiple accept="image/*,video/*" style="display: none;">
+            <button class="upload-btn" onclick="document.getElementById('media-upload').click()">Select Files</button>
+            <div id="upload-preview" style="margin-top: var(--space-md);"></div>
+            
+            <div style="margin-top: var(--space-lg);">
+                <h4>Monetization</h4>
+                <select id="content-type" style="width: 100%; padding: var(--space-sm); border-radius: 5px; border: 1px solid var(--gold-20);">
+                    <option value="free">Free for everyone</option>
+                    <option value="paid">Pay-per-view (set price)</option>
+                    <option value="subscription">Subscribers only</option>
+                </select>
+                
+                <div id="price-field" style="margin-top: var(--space-sm); display: none;">
+                    <label style="display: block; margin-bottom: var(--space-sm); color: var(--gold-dark);">Price ($)</label>
+                    <input type="number" min="0.99" step="0.99" value="2.99" style="width: 100%; padding: var(--space-sm); border: 1px solid var(--gold-20); border-radius: 5px;">
+                </div>
+            </div>
+            
+            <button class="upload-btn" style="margin-top: var(--space-lg); width: 100%;">Publish Content</button>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 style="color: var(--gold-dark);">Edit Content</h3>
+            <div style="margin: var(--space-lg) 0;">
+                <label style="display: block; margin-bottom: var(--space-sm); color: var(--gold-dark);">Visibility</label>
+                <select style="width: 100%; padding: var(--space-sm); border: 1px solid var(--gold-20); border-radius: 5px;">
+                    <option>Free for everyone</option>
+                    <option selected>Subscribers only</option>
+                    <option>Pay-per-view</option>
+                </select>
+                
+                <div style="margin-top: var(--space-md);">
+                    <label style="display: block; margin-bottom: var(--space-sm); color: var(--gold-dark);">Price ($)</label>
+                    <input type="number" value="2.99" style="width: 100%; padding: var(--space-sm); border: 1px solid var(--gold-20); border-radius: 5px;">
+                </div>
+            </div>
+            <button class="upload-btn" style="width: 100%;">Save Changes</button>
+            <button class="control-btn" style="width: 100%; margin-top: var(--space-sm); background-color: #ff4d4d; color: white;">Delete Content</button>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', currentTheme);
+        
+        themeToggle.addEventListener('click', () => {
+            const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Bio auto-save
+        const bioText = document.querySelector('.bio-text');
+        bioText.addEventListener('blur', function() {
+            localStorage.setItem('userBio', this.value);
+        });
+        
+        if(localStorage.getItem('userBio')) {
+            bioText.value = localStorage.getItem('userBio');
+        }
+        
+        // Filter controls
+        const filterButtons = document.querySelectorAll('[data-filter]');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                const items = document.querySelectorAll('.media-item');
+                
+                items.forEach(item => {
+                    item.style.display = filter === 'all' || item.dataset.type === filter ? 'block' : 'none';
+                });
+            });
+        });
+        
+        // Upload trigger
+        document.getElementById('upload-trigger').addEventListener('click', function() {
+            document.getElementById('upload-area').style.display = 'block';
+            window.scrollTo(0, document.getElementById('upload-area').offsetTop);
+        });
+        
+        // Content type toggle
+        document.getElementById('content-type').addEventListener('change', function() {
+            document.getElementById('price-field').style.display = 
+                this.value === 'paid' ? 'block' : 'none';
+        });
+        
+        // Edit buttons
+        const editButtons = document.querySelectorAll('.edit-btn');
+        const editModal = document.getElementById('edit-modal');
+        
+        editButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                editModal.style.display = 'block';
+            });
+        });
+        
+        // Close modal
+        document.querySelector('.close-modal').addEventListener('click', function() {
+            editModal.style.display = 'none';
+        });
+        
+        // File upload preview
+        document.getElementById('media-upload').addEventListener('change', function(e) {
+            const preview = document.getElementById('upload-preview');
+            preview.innerHTML = '';
+            
+            if(this.files) {
+                Array.from(this.files).forEach(file => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        const div = document.createElement('div');
+                        div.style.margin = '5px 0';
+                        
+                        if(file.type.startsWith('image/')) {
+                            div.innerHTML = `
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <img src="${event.target.result}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 5px; border: 1px solid var(--gold-20)">
+                                    <span>${file.name}</span>
+                                </div>
+                            `;
+                        } else if(file.type.startsWith('video/')) {
+                            div.innerHTML = `
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 60px; height: 60px; background: var(--gold-10); border-radius: 5px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold-20)">
+                                        🎥
+                                    </div>
+                                    <span>${file.name}</span>
+                                </div>
+                            `;
+                        }
+                        
+                        preview.appendChild(div);
+                    }
+                    
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
